@@ -1,0 +1,67 @@
+Coursera Data Science Specialization
+========================================================
+Statistical Inference Course Project
+========================================================
+
+This is the project for the Statistical Inference course within Coursera's Data Science Specialization. Simulation will be used to explore inference and conduct simple inferential data analysis. The project consists of 2 parts:
+
+1. Simulation Exercises
+2. Basic Inferential Data Analysis
+
+Part 2: Basic Inferential Data Analysis
+--------------------------------------------------------
+
+The ToothGrowth data in the R datasets package will be used to conduct basic inferential data analysis.
+
+Load the dataset and perform basic exploratory data analyses.
+
+```{r}
+data(ToothGrowth)
+str(ToothGrowth)
+table(ToothGrowth$supp, ToothGrowth$dose)
+```
+
+Provide a basic summary of the data.
+
+```{r}
+ToothGrowth$dose <- as.factor(ToothGrowth$dose)
+summary(ToothGrowth)
+
+library(ggplot2)
+summary <- ggplot(data=ToothGrowth, aes(x=dose, y=len, fill=supp)) + geom_boxplot() + facet_wrap(~ supp)
+print(summary)
+```
+
+Compare tooth growth by supp and dose using confidence intervals and hypothesis tests.
+
+```{r}
+t.test(ToothGrowth$len ~ ToothGrowth$supp, paired=FALSE, var.equal=TRUE, data=ToothGrowth, conf.level=0.95)
+
+doseA <- ToothGrowth[ToothGrowth$dose==0.5,]
+t.test(doseA$len ~ doseA$supp, paired=FALSE, var.equal=TRUE, data=ToothGrowth)
+
+doseB <- ToothGrowth[ToothGrowth$dose==1,]
+t.test(doseB$len ~ doseB$supp, paired=FALSE, var.equal=TRUE, data=ToothGrowth)
+
+doseC <- ToothGrowth[ToothGrowth$dose==2,]
+t.test(doseC$len ~ doseC$supp, paired=FALSE, var.equal=TRUE, data=ToothGrowth)
+
+t.test(ToothGrowth$len[ToothGrowth$supp=="OJ"], ToothGrowth$len[ToothGrowth$supp=="VC"])
+
+t.test(ToothGrowth$len[ToothGrowth$dose==0.5], ToothGrowth$len[ToothGrowth$dose==1])
+
+t.test(ToothGrowth$len[ToothGrowth$dose==1], ToothGrowth$len[ToothGrowth$dose==2])
+
+t.test(ToothGrowth$len[ToothGrowth$dose==0.5], ToothGrowth$len[ToothGrowth$dose==2])
+
+```
+
+State assumptions and conclusions.
+
+Assumptions: equal variance, not paired samples
+Null Hypothesis: no difference in impact of OJ v. VC
+
+Conclusions: 
+In comparing the OJ supplement versus the VC supplement, there do not appear to be any significant differences in the impact on len. The p-value of 0.06063 is larger th
+an alpha (0.05) and the null hypothesis is not rejected.
+In comparing the 3 levels of doses, there does appear a significant impact of the level of dose. Each paired t-test revealed a p-value less than 0.05 leading to the null hyopothesis being rejected.
